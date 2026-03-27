@@ -10,7 +10,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from config import get_settings
-from app.db import Note, Reminder, UserMemory
+from db import SessionLocal
 
 
 settings = get_settings()
