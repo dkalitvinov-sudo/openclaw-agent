@@ -7,9 +7,9 @@ from typing import Any
 from openai import AsyncOpenAI
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.config import get_settings
-from app.db import get_user_memories
-from app.tools import TOOL_SCHEMAS, dump_tool_result, run_tool
+from config import get_settings
+from db import get_user_memories
+from tools import TOOL_SCHEMAS, dump_tool_result, run_tool
 
 
 settings = get_settings()
