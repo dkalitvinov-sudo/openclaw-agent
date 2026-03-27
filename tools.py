@@ -9,7 +9,7 @@ import httpx
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.config import get_settings
+from config import get_settings
 from app.db import Note, Reminder, UserMemory
 
 
