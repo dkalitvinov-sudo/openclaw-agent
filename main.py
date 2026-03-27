@@ -1,5 +1,4 @@
-from fastapi import FastAPI, Request, Header, HTTPException
-from fastapi.responses import JSONResponse
+from fastapi import FastAPI, Request
 import httpx
 import uvicorn
 from config import get_settings
@@ -36,35 +35,34 @@ async def setup_webhook():
 
 
 @app.post("/telegram/webhook")
-async def telegram_webhook(
-    request: Request,
-    x_telegram_bot_api_secret_token: str | None = Header(default=None),
-):
-    if settings.telegram_secret_token:
-        if x_telegram_bot_api_secret_token != settings.telegram_secret_token:
-            raise HTTPException(status_code=401, detail="Invalid secret token")
-
+async def telegram_webhook(request: Request):
     update = await request.json()
-    message = update.get("message") or update.get("edited_message")
+    print("UPDATE:", update)
 
+    message = update.get("message")
     if not message:
-        return JSONResponse({"ok": True})
+        return {"ok": True}
 
-    chat = message.get("chat", {})
-    chat_id = chat.get("id")
-    text = message.get("text") or message.get("caption") or "Сообщение получено."
+    chat_id = message["chat"]["id"]
+    text = message.get("text", "нет текста")
 
-    if chat_id:
+    print("CHAT_ID:", chat_id)
+    print("TEXT:", text)
+
+    try:
         async with httpx.AsyncClient() as client:
-            await client.post(
+            r = await client.post(
                 f"https://api.telegram.org/bot{settings.telegram_bot_token}/sendMessage",
                 json={
                     "chat_id": chat_id,
-                    "text": f"Ты написал: {text}",
+                    "text": f"Ответ: {text}"
                 },
             )
+            print("TELEGRAM RESPONSE:", r.text)
+    except Exception as e:
+        print("ERROR SENDING:", str(e))
 
-    return JSONResponse({"ok": True})
+    return {"ok": True}
 
 
 if __name__ == "__main__":
