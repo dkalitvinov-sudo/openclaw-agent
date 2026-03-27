@@ -8,7 +8,7 @@ from sqlalchemy import select
 
 from db import SessionLocal
 from tools import run_tool
-from app.telegram_api import TelegramAPI
+from telegram_api import TelegramAPI
 
 
 settings = get_settings()
