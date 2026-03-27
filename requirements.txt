@@ -1,0 +1,10 @@
+fastapi==0.116.1
+uvicorn[standard]==0.35.0
+openai==2.29.0
+httpx==0.28.1
+sqlalchemy==2.0.43
+aiosqlite==0.21.0
+pydantic==2.11.9
+pydantic-settings==2.11.0
+apscheduler==3.11.0
+python-multipart==0.0.20
