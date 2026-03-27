@@ -6,8 +6,8 @@ from zoneinfo import ZoneInfo
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from sqlalchemy import select
 
-from config import get_settings
-from app.db import Reminder, SessionLocal
+from db import SessionLocal
+from tools import run_tool
 from app.telegram_api import TelegramAPI
 
 
