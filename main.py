@@ -13,7 +13,6 @@ from fastapi.responses import JSONResponse
 from agent import run_agent, synthesize_speech, transcribe_audio
 from config import get_settings
 from db import init_db
-from scheduler import start_scheduler
 from telegram_api import TelegramAPI
 
 settings = get_settings()
@@ -27,21 +26,20 @@ URL_RE = re.compile(r"https?://\S+")
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     await init_db()
-    start_scheduler()
     yield
 
 
 app = FastAPI(title="Telegram Railway Agent", lifespan=lifespan)
 
 
-@app.get("/healthz")
-async def healthz() -> dict[str, str]:
-    return {"status": "ok"}
-
-
 @app.get("/")
 async def root() -> dict[str, str]:
     return {"status": "ok", "message": "Telegram Railway Agent is running"}
+
+
+@app.get("/healthz")
+async def healthz() -> dict[str, str]:
+    return {"status": "ok"}
 
 
 @app.get("/setup-webhook")
@@ -90,7 +88,8 @@ async def handle_update(update: dict[str, Any]) -> None:
         wants_voice_reply = "ответь голосом" in lowered or "голосом" in lowered
 
     if message.get("voice") or message.get("audio"):
-        file_id = (message.get("voice") or message.get("audio")).get("file_id")
+        media = message.get("voice") or message.get("audio")
+        file_id = media.get("file_id")
         if not file_id:
             return
 
