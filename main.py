@@ -1,11 +1,12 @@
 from fastapi import FastAPI
+import uvicorn
 
 app = FastAPI()
 
 
 @app.get("/")
 async def root():
-    return {"status": "ok", "message": "root works"}
+    return {"status": "ok"}
 
 
 @app.get("/healthz")
@@ -13,6 +14,5 @@ async def healthz():
     return {"status": "ok"}
 
 
-@app.get("/setup-webhook")
-async def setup_webhook():
-    return {"status": "ok", "message": "setup-webhook works"}
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)
